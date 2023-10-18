@@ -7,9 +7,9 @@ public class KartenDeck {
     public KartenDeck() {
         this.kartenDeck = new ArrayList<Card>();
 
-        for (Wert wert: Wert.values()) {
-            for (Farbe farbe: Farbe.values()) {
-                kartenDeck.add(new Card(wert, farbe));
+        for (CardValue cardValue : CardValue.values()) {
+            for (CardColor cardColor : CardColor.values()) {
+                kartenDeck.add(new Card(cardValue, cardColor));
             }
         }
     }

@@ -1,55 +1,55 @@
 public class Card {
-    private Wert wert;
-    private Farbe farbe;
+    private CardValue cardValue;
+    private CardColor cardColor;
 
-    public Card(Wert wert, Farbe farbe) {
-        this.wert = wert;
-        this.farbe = farbe;
+    public Card(CardValue cardValue, CardColor cardColor) {
+        this.cardValue = cardValue;
+        this.cardColor = cardColor;
     }
 
-    public void setWert(Wert wert) {
-        this.wert = wert;
+    public void setCardValue(CardValue cardValue) {
+        this.cardValue = cardValue;
     }
 
-    public Farbe getFarbe() {
-        return farbe;
+    public CardColor getCardColor() {
+        return cardColor;
     }
 
-    public void setFarbe(Farbe farbe) {
-        this.farbe = farbe;
+    public void setCardColor(CardColor cardColor) {
+        this.cardColor = cardColor;
     }
 
-    public int getWert() {
-        return switch (this.wert) {
-            case SIEBE -> 7;
-            case ACHT -> 8;
-            case NEUN -> 9;
-            case ZEHN, DAME, BUBE, KÖNIG -> 10;
-            case ASS -> 11;
+    public int getCardValue() {
+        return switch (this.cardValue) {
+            case SEVEN -> 7;
+            case EIGHT -> 8;
+            case NINE -> 9;
+            case TEN, QUEEN, JACK, KING -> 10;
+            case ACE -> 11;
             default -> 0;
         };
     }
 
     @Override
     public String toString() {
-        return "[" + wert + ", " + farbe + ']';
+        return "[" + cardValue + ", " + cardColor + ']';
     }
 }
 
-enum Wert {
-    SIEBE,
-    ACHT,
-    NEUN,
-    ZEHN,
-    BUBE,
-    DAME,
-    KÖNIG,
-    ASS
+enum CardValue {
+    SEVEN,
+    EIGHT,
+    NINE,
+    TEN,
+    JACK,
+    QUEEN,
+    KING,
+    ACE
 }
 
-enum Farbe {
-    KARO,
-    PICK,
-    HERZ,
-    KREUZ
+enum CardColor {
+    DIMONDS,
+    HEARTS,
+    CLUBS,
+    SPADES
 }

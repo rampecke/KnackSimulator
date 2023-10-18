@@ -8,9 +8,19 @@ public class Player {
 
     private Boolean playerKlopft = false;
 
+    private Strategy strategy;
+
     public Player(String playerName, Game game) {
         this.playerName = playerName;
         this.game = game;
+    }
+
+    public Strategy getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(Strategy strategy) {
+        this.strategy = strategy;
     }
 
     public ArrayList<Card> getCardInHand() {
@@ -26,12 +36,13 @@ public class Player {
     }
 
     public int pointsCardInHands() {
-        PointCalculator pointCalculator = new PointCalculator();
-        return pointCalculator.pointsInCards(cardInHand);
+        CardHandler cardHandler = new CardHandler();
+        return cardHandler.pointsInCards(cardInHand);
     }
 
-    public void changeOneCard(int indexCardInPlayerHand, int indexCardOnTableCards) {
-        if(pointsCardInHands() >= 31 || playerKlopft) {
+    //Options for a player to play (each checks if player has won already, if he knocked or if the game is over)
+    public void swapOneCard(int indexCardInPlayerHand, int indexCardOnTableCards) {
+        if(pointsCardInHands() >= 31 || playerKlopft || game.getGameEnded()) {
             game.endGame();
         } else {
             ArrayList<Card> cardOnTable = game.getCardOnTable();
@@ -50,12 +61,18 @@ public class Player {
             System.out.println(this.playerName + ": Changed HandOfPlayerCard: " + (indexCardInPlayerHand + 1) + " with TableCard: " + (indexCardOnTableCards + 1));
             game.printHandandTableCards();
 
+            //Check after cardswapp if player won
+            if(pointsCardInHands() >= 31) {
+                game.endGame();
+                return;
+            }
+
             game.nextPlayer();
         }
     }
 
     public void swapHandWithTableCards() {
-        if(pointsCardInHands() >= 31 || playerKlopft) {
+        if(pointsCardInHands() >= 31 || playerKlopft || game.getGameEnded()) {
             game.endGame();
         } else {
             ArrayList<Card> cardOnTable = game.getCardOnTable();
@@ -66,12 +83,18 @@ public class Player {
             System.out.println( this.playerName + ": Swapped HandCards with TableCards");
             game.printHandandTableCards();
 
+            //Check after cardswapp if player won
+            if(pointsCardInHands() >= 31) {
+                game.endGame();
+                return;
+            }
+
             game.nextPlayer();
         }
     }
 
     public void playerKnocked() {
-        if(pointsCardInHands() >= 31 || playerKlopft) {
+        if(pointsCardInHands() >= 31 || playerKlopft || game.getGameEnded()) {
             game.endGame();
         } else {
             System.out.println(playerName + ": Has Knocked\n");
@@ -83,7 +106,7 @@ public class Player {
     }
 
     public void pass() {
-        if(pointsCardInHands() >= 31 || playerKlopft) {
+        if(pointsCardInHands() >= 31 || playerKlopft || game.getGameEnded()) {
             game.endGame();
         } else {
             System.out.println(playerName + ": Has Passed\n");
@@ -106,5 +129,9 @@ public class Player {
         }
 
         return returnString;
+    }
+
+    public String pointsAndNameToString() {
+        return playerName + ": " + this.pointsCardInHands();
     }
 }

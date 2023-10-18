@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class Game {
     private ArrayList<Player> players = new ArrayList<Player>();
@@ -8,7 +9,7 @@ public class Game {
 
     private int playingPlayerIndex = 0;
 
-    private Boolean gameEnde = false;
+    private Boolean gameEnded = false;
     private ArrayList<Integer> indexOfLoser = new ArrayList<Integer>();
 
     public Game(int numberOfPlayers) {
@@ -39,6 +40,10 @@ public class Game {
         this.cardOnTable = cardOnTable;
     }
 
+    public Boolean getGameEnded() {
+        return gameEnded;
+    }
+
     private void distributeCards() {
         for(Player player: players) {
             player.setCardInHand(cardDeck.getThreeCardsFromCardDeck());
@@ -58,62 +63,38 @@ public class Game {
     }
 
     public void endGame() {
-        //End Game
-        gameEnde = true;
-        //Set who lost the game
-        int lowestPoints = players.get(0).pointsCardInHands();
+        if(!gameEnded) {
+            //End Game
+            gameEnded = true;
+            //Set who lost the game
+            int lowestPoints = players.get(0).pointsCardInHands();
 
-        for(Player player: players) {
-            int pointsOfPlayer = player.pointsCardInHands();
+            for (Player player : players) {
+                int pointsOfPlayer = player.pointsCardInHands();
 
-            if (pointsOfPlayer < lowestPoints) {
-                lowestPoints = pointsOfPlayer;
+                if (pointsOfPlayer < lowestPoints) {
+                    lowestPoints = pointsOfPlayer;
+                }
             }
-        }
 
-        for (int i = 0; i < players.size(); i++) {
-            int pointsOfPlayer = players.get(i).pointsCardInHands();
+            for (int i = 0; i < players.size(); i++) {
+                int pointsOfPlayer = players.get(i).pointsCardInHands();
 
-            if (lowestPoints == pointsOfPlayer) {
-                this.indexOfLoser.add(i);
+                if (lowestPoints == pointsOfPlayer) {
+                    this.indexOfLoser.add(i);
+                }
             }
-        }
 
-        System.out.println("Game is over");
-        System.out.println("Player(s) Lost: " + this.indexOfLoser);
+            System.out.println("Game is over");
+            players.forEach(player -> System.out.println(player.pointsAndNameToString()));
+            System.out.println("Player(s) Lost: " + indexOfLoser.stream().map(index -> players.get(index).getPlayerName()).collect(Collectors.toList()));
+        }
     }
 
-    /*public void normalPlayerPlay() {
-        //Game is Already over
-        if (gameEnde) {
-            System.out.println("Game is over");
-            return;
-        }
-
-        //Player Knopft and Round is over
-        if(playerKlopftIndex == playingPlayerIndex) {
-            endGame();
-        }
-
-        //Check if player won already
-        if (players.get(playingPlayerIndex).pointsCardInHands() >= 31) {
-            endGame();
-        }
-
-        //Swapp all if Cards on Table are higher then own
-        if (players.get(playingPlayerIndex).pointsCardInHands() < pointsCardOnTable()) {
-            swapHandWithTableCards();
-            nextPlayer();
-            return;
-        } else {
-            
-        }
-    }*/
-
-    /*private int pointsCardOnTable() {
-        PointCalculator pointCalculator = new PointCalculator();
-        return pointCalculator.pointsInCards(cardOnTable);
-    }*/
+    public int pointsCardOnTable() {
+        CardHandler cardHandler = new CardHandler();
+        return cardHandler.pointsInCards(cardOnTable);
+    }
 
     public void nextPlayer() {
         if( playingPlayerIndex == players.size() - 1 ) {
