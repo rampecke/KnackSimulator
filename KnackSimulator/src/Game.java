@@ -7,20 +7,36 @@ public class Game {
     private ArrayList<Card> cardOnTable = new ArrayList<Card>();
 
     private int playingPlayerIndex = 0;
-    private int playerKlopftIndex = -1;
 
     private Boolean gameEnde = false;
-    private int[] indexOfLoser = new int[] {};
+    private ArrayList<Integer> indexOfLoser = new ArrayList<Integer>();
 
     public Game(int numberOfPlayers) {
+        if (numberOfPlayers > 0 && numberOfPlayers <= 9) {
+
         for(int i = 0; i < numberOfPlayers; i++) {
-            players.add(new Player("Player" + (i + 1)));
+            players.add(new Player("Player" + (i + 1), this));
         }
         System.out.println("Game created");
 
         distributeCards();
 
-        System.out.println();
+        selectFirstPlayerToStart();
+        } else {
+            System.out.println("Wrong numbers for player");
+        }
+    }
+
+    public Player getPlayingPlayer() {
+        return players.get(playingPlayerIndex);
+    }
+
+    public ArrayList<Card> getCardOnTable() {
+        return cardOnTable;
+    }
+
+    public void setCardOnTable(ArrayList<Card> cardOnTable) {
+        this.cardOnTable = cardOnTable;
     }
 
     private void distributeCards() {
@@ -33,7 +49,41 @@ public class Game {
         System.out.println("Cards distributed");
     }
 
-    public void normalPlayerPlay() {
+    private void selectFirstPlayerToStart() {
+        Random rand = new Random();
+        playingPlayerIndex = rand.nextInt(players.size());
+
+        System.out.println("First player is: " + players.get(playingPlayerIndex).getPlayerName());
+        printHandandTableCards();
+    }
+
+    public void endGame() {
+        //End Game
+        gameEnde = true;
+        //Set who lost the game
+        int lowestPoints = players.get(0).pointsCardInHands();
+
+        for(Player player: players) {
+            int pointsOfPlayer = player.pointsCardInHands();
+
+            if (pointsOfPlayer < lowestPoints) {
+                lowestPoints = pointsOfPlayer;
+            }
+        }
+
+        for (int i = 0; i < players.size(); i++) {
+            int pointsOfPlayer = players.get(i).pointsCardInHands();
+
+            if (lowestPoints == pointsOfPlayer) {
+                this.indexOfLoser.add(i);
+            }
+        }
+
+        System.out.println("Game is over");
+        System.out.println("Player(s) Lost: " + this.indexOfLoser);
+    }
+
+    /*public void normalPlayerPlay() {
         //Game is Already over
         if (gameEnde) {
             System.out.println("Game is over");
@@ -58,28 +108,12 @@ public class Game {
         } else {
             
         }
-    }
+    }*/
 
-    private void endGame() {
-        gameEnde = true;
-
-        //indexOfLoser = players.stream().reduce(0, (acc, currentPlayer) -> currentPlayer.pointsCardInHands() < acc.pointsCardInHands());
-
-        System.out.println("Game is over");
-    }
-
-    private int pointsCardOnTable() {
+    /*private int pointsCardOnTable() {
         PointCalculator pointCalculator = new PointCalculator();
         return pointCalculator.pointsInCards(cardOnTable);
-    }
-
-    public void selectFirstPlayerToStart() {
-        Random rand = new Random();
-        playingPlayerIndex = rand.nextInt(players.size());
-
-        System.out.println("First player is: " + players.get(playingPlayerIndex).getPlayerName());
-        printHandandTableCards();
-    }
+    }*/
 
     public void nextPlayer() {
         if( playingPlayerIndex == players.size() - 1 ) {
@@ -90,50 +124,6 @@ public class Game {
 
         System.out.println("Now playing: " + players.get(playingPlayerIndex).getPlayerName());
         printHandandTableCards();
-    }
-
-    public void changeOneCard(int indexCardInPlayerHand, int indexCardOnTableCards) {
-        ArrayList<Card> cardInHandPlayer = players.get(playingPlayerIndex).getCardInHand();
-
-        if (indexCardInPlayerHand >= cardInHandPlayer.size() || indexCardOnTableCards >= cardOnTable.size()) {return;}
-
-        Card cardPlayer = cardInHandPlayer.get(indexCardInPlayerHand);
-        Card cardTable = this.cardOnTable.get(indexCardOnTableCards);
-
-        cardOnTable.remove(indexCardOnTableCards);
-        cardOnTable.add(indexCardOnTableCards, cardPlayer);
-
-        cardInHandPlayer.remove(indexCardInPlayerHand);
-        cardInHandPlayer.add(indexCardInPlayerHand, cardTable);
-
-        players.get(playingPlayerIndex).setCardInHand(cardInHandPlayer);
-
-        System.out.println(players.get(playingPlayerIndex).getPlayerName() + ": Changed HandOfPlayerCard: " + (indexCardInPlayerHand + 1) + " with TableCard: " + (indexCardOnTableCards + 1));
-        printHandandTableCards();
-    }
-
-    public void swapHandWithTableCards() {
-        ArrayList<Card> cardInHandPlayer = players.get(playingPlayerIndex).getCardInHand();
-
-        players.get(playingPlayerIndex).setCardInHand(this.cardOnTable);
-        this.cardOnTable = cardInHandPlayer;
-
-        System.out.println(players.get(playingPlayerIndex).getPlayerName() + ": Swapped HandCards with TableCards");
-        printHandandTableCards();
-    }
-
-    public void playerKnocked() {
-        playerKlopftIndex = playingPlayerIndex;
-
-        System.out.println(players.get(playingPlayerIndex).getPlayerName() + ": Has Knocked\n");
-        System.out.println("__________________________ \n");
-    }
-
-    public void pass() {
-        System.out.println(players.get(playingPlayerIndex).getPlayerName() + ": Has Passed\n");
-        System.out.println("__________________________ \n");
-
-        this.nextPlayer();
     }
 
     //Helper
@@ -151,7 +141,7 @@ public class Game {
         return returnString;
     }
 
-    private void printHandandTableCards() {
+    public void printHandandTableCards() {
         System.out.println("Karten in Hand: \n" + players.get(playingPlayerIndex).cardsInHandToString());
         System.out.println("Punktzahl: \n" + players.get(playingPlayerIndex).pointsCardInHands() + "\n");
         System.out.println("Karten on Table: \n" + this.cardsOnTableToString() + "\n");

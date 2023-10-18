@@ -1,17 +1,15 @@
 public class Main {
     public static void main(String[] args) {
-        Game game = new Game(9);
+        Game game = new Game(2);
 
-        game.selectFirstPlayerToStart();
+        game.getPlayingPlayer().changeOneCard(2,2);
 
-        game.changeOneCard(2,2);
+        game.getPlayingPlayer().swapHandWithTableCards();
 
-        game.nextPlayer();
+        game.getPlayingPlayer().playerKnocked();
 
-        game.swapHandWithTableCards();
+        game.getPlayingPlayer().changeOneCard(2,2);
 
-        game.nextPlayer();
-
-        game.playerKnocked();
+        game.getPlayingPlayer().swapHandWithTableCards();
     }
 }
