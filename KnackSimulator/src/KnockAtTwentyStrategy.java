@@ -17,7 +17,12 @@ public class KnockAtTwentyStrategy implements Strategy{
         }
 
         if(player.pointsCardInHands() >= 20) {
-            player.playerKnocked();
+            if (!game.getSomeOneKnocked()) { //Only Knock if noone knocked
+                player.playerKnocked();
+            } else {
+                NormalPlayerStratagie normalPlayerStratagie = new NormalPlayerStratagie(game, player);
+                normalPlayerStratagie.playIdealMove();
+            }
         } else {
             NormalPlayerStratagie normalPlayerStratagie = new NormalPlayerStratagie(game, player);
             normalPlayerStratagie.playIdealMove();
