@@ -10,6 +10,7 @@ public class Game {
     private int playingPlayerIndex = 0;
 
     private Boolean gameEnded = false;
+    private boolean someOneKnocked = false;
     private ArrayList<Integer> indexOfLoser = new ArrayList<Integer>();
 
     public Game(int numberOfPlayers) {
@@ -19,13 +20,26 @@ public class Game {
             players.add(new Player("Player" + (i + 1), this));
         }
         System.out.println("Game created");
-
         distributeCards();
+
+        players.get(0).setStrategy(new KnockAtTwentyStrategy(this, players.get(0)));
 
         selectFirstPlayerToStart();
         } else {
             System.out.println("Wrong numbers for player");
         }
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public boolean getSomeOneKnocked() {
+        return someOneKnocked;
+    }
+
+    public void setSomeOneKnocked(boolean someOneKnocked) {
+        this.someOneKnocked = someOneKnocked;
     }
 
     public Player getPlayingPlayer() {
@@ -88,6 +102,7 @@ public class Game {
             System.out.println("Game is over");
             players.forEach(player -> System.out.println(player.pointsAndNameToString()));
             System.out.println("Player(s) Lost: " + indexOfLoser.stream().map(index -> players.get(index).getPlayerName()).collect(Collectors.toList()));
+            players.forEach(player -> player.getStrategy().printString());
         }
     }
 

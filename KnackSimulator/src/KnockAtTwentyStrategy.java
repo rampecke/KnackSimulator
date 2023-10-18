@@ -8,6 +8,10 @@ public class KnockAtTwentyStrategy implements Strategy{
     }
     @Override
     public void playMove() {
+        if (game.getPlayingPlayer().getPlayerKlopft()) {
+            game.endGame();
+        }
+        //If game is AllReady over
         if(game.getGameEnded()) {
             return;
         }
@@ -18,5 +22,16 @@ public class KnockAtTwentyStrategy implements Strategy{
             NormalPlayerStratagie normalPlayerStratagie = new NormalPlayerStratagie(game, player);
             normalPlayerStratagie.playIdealMove();
         }
+
+        if(player.pointsCardInHands() >= 31) {
+            game.endGame();
+            return;
+        }
+
+        game.nextPlayer();
+    }
+
+    public void printString() {
+        System.out.println(player.getPlayerName() + " had special Startagie");
     }
 }

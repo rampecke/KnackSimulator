@@ -36,6 +36,10 @@ public class Player {
         return playerName;
     }
 
+    public Boolean getPlayerKlopft() {
+        return playerKlopft;
+    }
+
     public int pointsCardInHands() {
         CardHandler cardHandler = new CardHandler();
         return cardHandler.pointsInCards(cardInHand);
@@ -47,77 +51,43 @@ public class Player {
 
     //Options for a player to play (each checks if player has won already, if he knocked or if the game is over)
     public void swapOneCard(int indexCardInPlayerHand, int indexCardOnTableCards) {
-        if(pointsCardInHands() >= 31 || playerKlopft || game.getGameEnded()) {
-            game.endGame();
-        } else {
-            ArrayList<Card> cardOnTable = game.getCardOnTable();
+        ArrayList<Card> cardOnTable = game.getCardOnTable();
 
-            if (indexCardInPlayerHand >= cardInHand.size() || indexCardOnTableCards >= cardOnTable.size()) {return;}
+        if (indexCardInPlayerHand >= cardInHand.size() || indexCardOnTableCards >= cardOnTable.size()) {return;}
 
-            Card cardPlayer = cardInHand.get(indexCardInPlayerHand);
-            Card cardTable = cardOnTable.get(indexCardOnTableCards);
+        Card cardPlayer = cardInHand.get(indexCardInPlayerHand);
+        Card cardTable = cardOnTable.get(indexCardOnTableCards);
 
-            cardOnTable.remove(indexCardOnTableCards);
-            cardOnTable.add(indexCardOnTableCards, cardPlayer);
+        cardOnTable.remove(indexCardOnTableCards);
+        cardOnTable.add(indexCardOnTableCards, cardPlayer);
 
-            cardInHand.remove(indexCardInPlayerHand);
-            cardInHand.add(indexCardInPlayerHand, cardTable);
+        cardInHand.remove(indexCardInPlayerHand);
+        cardInHand.add(indexCardInPlayerHand, cardTable);
 
-            System.out.println(this.playerName + ": Changed HandOfPlayerCard: " + (indexCardInPlayerHand + 1) + " with TableCard: " + (indexCardOnTableCards + 1));
-            game.printHandandTableCards();
-
-            //Check after cardswapp if player won
-            if(pointsCardInHands() >= 31) {
-                game.endGame();
-                return;
-            }
-
-            game.nextPlayer();
-        }
+        System.out.println(this.playerName + ": Changed HandOfPlayerCard: " + (indexCardInPlayerHand + 1) + " with TableCard: " + (indexCardOnTableCards + 1));
+        game.printHandandTableCards();
     }
 
     public void swapHandWithTableCards() {
-        if(pointsCardInHands() >= 31 || playerKlopft || game.getGameEnded()) {
-            game.endGame();
-        } else {
-            ArrayList<Card> cardOnTable = game.getCardOnTable();
+        ArrayList<Card> cardOnTable = game.getCardOnTable();
 
-            game.setCardOnTable(this.cardInHand);
-            this.setCardInHand(cardOnTable);
+        game.setCardOnTable(this.cardInHand);
+        this.setCardInHand(cardOnTable);
 
-            System.out.println( this.playerName + ": Swapped HandCards with TableCards");
-            game.printHandandTableCards();
-
-            //Check after cardswapp if player won
-            if(pointsCardInHands() >= 31) {
-                game.endGame();
-                return;
-            }
-
-            game.nextPlayer();
-        }
+        System.out.println( this.playerName + ": Swapped HandCards with TableCards");
+        game.printHandandTableCards();
     }
 
     public void playerKnocked() {
-        if(pointsCardInHands() >= 31 || playerKlopft || game.getGameEnded()) {
-            game.endGame();
-        } else {
-            System.out.println(playerName + ": Has Knocked\n");
-            System.out.println("__________________________ \n");
-            game.nextPlayer();
-
-            playerKlopft = true;
-        }
+        System.out.println(playerName + ": Has Knocked\n");
+        System.out.println("__________________________ \n");
+        this.playerKlopft = true;
+        game.setSomeOneKnocked(true);
     }
 
     public void pass() {
-        if(pointsCardInHands() >= 31 || playerKlopft || game.getGameEnded()) {
-            game.endGame();
-        } else {
-            System.out.println(playerName + ": Has Passed\n");
-            System.out.println("__________________________ \n");
-            game.nextPlayer();
-        }
+        System.out.println(playerName + ": Has Passed\n");
+        System.out.println("__________________________ \n");
     }
 
     //Helper print function
