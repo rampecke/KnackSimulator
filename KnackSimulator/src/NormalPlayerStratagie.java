@@ -17,10 +17,29 @@ public class NormalPlayerStratagie implements Strategy {
             return;
         }
 
-        //Player will knock
+        //Player will knock based on points in hand(if between 0-10 points with 0,0001%, if between 11-15 with 0,01%, if betweem 16-20  1,0%, if between 21-22 5,0%, between 23-25 50%, if between 26-27 80%, if bigger than 95%)
         Random random = new Random();
+        int pointsInHand = player.pointsCardInHands();
 
-        if(random.nextInt(1, 100) < 2) {
+        double knockProbability = 0.0;
+
+        if (pointsInHand >= 0 && pointsInHand <= 10) {
+            knockProbability = 0.0001;
+        } else if (pointsInHand >= 11 && pointsInHand <= 15) {
+            knockProbability = 0.01;
+        } else if (pointsInHand >= 16 && pointsInHand <= 20) {
+            knockProbability = 1.0;
+        } else if (pointsInHand >= 21 && pointsInHand <= 22) {
+            knockProbability = 5.0;
+        } else if (pointsInHand >= 23 && pointsInHand <= 25) {
+            knockProbability = 50.0;
+        } else if (pointsInHand >= 26 && pointsInHand <= 27) {
+            knockProbability = 80.0;
+        } else if (pointsInHand > 27) {
+            knockProbability = 95.0;
+        }
+
+        if (random.nextDouble() < knockProbability / 100.0) {
             player.playerKnocked();
         }
 
