@@ -56,13 +56,13 @@ public class NormalPlayerStratagie implements Strategy {
 
         System.out.println("SwapBest: " + cardPointsBestSwap.pointsOnHandAfterSwap + " PassBest: " + cardPointsPass + " SwapAllBest: " + cardPointsSwapAll);
         if(cardPointsBestSwap.pointsOnHandAfterSwap > cardPointsPass && cardPointsBestSwap.pointsOnHandAfterSwap > cardPointsSwapAll) {
-            System.out.println("Swap was called [" + cardPointsBestSwap.indexHandCard + ", " + cardPointsBestSwap.indexTableCard + "]");
+            //System.out.println("Swap was called [" + cardPointsBestSwap.indexHandCard + ", " + cardPointsBestSwap.indexTableCard + "]");
             player.swapOneCard(cardPointsBestSwap.indexHandCard, cardPointsBestSwap.indexTableCard);
         } else if (cardPointsSwapAll > cardPointsPass) {
-            System.out.println("SwapAll");
+            //System.out.println("SwapAll");
             player.swapHandWithTableCards();
         } else {
-            System.out.println("Pass");
+            //System.out.println("Pass");
             player.pass();
         }
     }
