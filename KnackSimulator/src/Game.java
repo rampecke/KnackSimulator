@@ -30,6 +30,10 @@ public class Game {
         }
     }
 
+    public ArrayList<Integer> getIndexOfLoser() {
+        return indexOfLoser;
+    }
+
     public ArrayList<Player> getPlayers() {
         return players;
     }

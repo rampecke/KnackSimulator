@@ -12,10 +12,26 @@ public class Main {
             return;
         }
 
-        Game game = new Game(numberOfPlayers);
+        int playerWithStrategie = 0;
+        int playerWithOutStratagie = 1;
 
-        while (!game.getGameEnded()) {
-            game.getPlayingPlayer().play();
+        for(int i = 0; i <= 10000; i++) {
+            Game game = new Game(numberOfPlayers);
+
+            while (!game.getGameEnded()) {
+                game.getPlayingPlayer().play();
+            }
+
+            if (game.getIndexOfLoser().contains(0)) {
+                playerWithStrategie++;
+            }
+
+            if (game.getIndexOfLoser().contains(1)) {
+                playerWithOutStratagie++;
+            }
         }
+
+        System.out.println("Player with special Stratagie lost " + playerWithStrategie + " from 10000 times with " + numberOfPlayers + " Players");
+        System.out.println("Player with special Stratagie lost " + playerWithOutStratagie + " from 10000 times with " + numberOfPlayers + " Players");
     }
 }
