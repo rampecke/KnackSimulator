@@ -51,7 +51,7 @@ public class Game {
 
         this.cardOnTable = cardDeck.getThreeCardsFromCardDeck();
 
-        System.out.println("Cards distributed");
+        System.out.println("Cards distributed \n");
     }
 
     private void selectFirstPlayerToStart() {

@@ -17,24 +17,40 @@ public class CardHandler {
         int indexTabelBestSwap = 0;
         int pointsOnHandAfterBestSwapp = 0;
 
+        //Search for Card Swap with highest highest point on HandCards after swap
         for (int i = 0; i < cardsHand.size(); i++) {
             for(int j = 0; j < cardsTable.size(); j++) {
-                ArrayList<Card> newArrayHand = cardsHand;
-                ArrayList<Card> newArrayTable = cardsTable;
+                ArrayList<Card> newArrayHand = new ArrayList<Card>(cardsHand);
+                ArrayList<Card> newArrayTable = new ArrayList<Card>(cardsTable);
 
-                Card hand = newArrayHand.get(i);
-                Card table = newArrayTable.get(i);
+                Card hand = cardsHand.get(i);
+                Card table = cardsTable.get(j);
 
-                cardsTable.remove(j);
-                cardsTable.add(j, hand);
+                newArrayTable.remove(j);
+                newArrayTable.add(j, hand);
 
-                cardsHand.remove(i);
-                cardsHand.add(i, table);
+                newArrayHand.remove(i);
+                newArrayHand.add(i, table);
 
-                if (pointsInCards(cardsHand) > pointsOnHandAfterBestSwapp) {
+                if(pointsInCards(newArrayHand) == pointsOnHandAfterBestSwapp) {
+                    //if both options are the same pointwise then we want to drop the card with lower value
+                    Card handBestSwapOld = cardsHand.get(indexHandBestSwap);
+                    Card handBestSwapNew = cardsHand.get(i);
+
+                    //System.out.println("Old: " + handBestSwapOld.toString() + "or New: " + handBestSwapNew.toString());
+
+                    if(handBestSwapOld.getCardValue() > handBestSwapNew.getCardValue()) {
+                        indexHandBestSwap = i;
+                        indexTabelBestSwap = j;
+                        pointsOnHandAfterBestSwapp = pointsInCards(newArrayHand);
+                        //System.out.println(handBestSwapNew.toString() + "was smaller, so it will be swapped");
+                    } /*else {
+                        System.out.println(handBestSwapOld.toString() + "was smaller or same, so the old will be swapped");
+                    }*/
+                } else if (pointsInCards(newArrayHand) > pointsOnHandAfterBestSwapp) {
                     indexHandBestSwap = i;
                     indexTabelBestSwap = j;
-                    pointsOnHandAfterBestSwapp = pointsInCards(cardsHand);
+                    pointsOnHandAfterBestSwapp = pointsInCards(newArrayHand);
                 }
             }
         }

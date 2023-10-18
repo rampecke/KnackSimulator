@@ -13,6 +13,7 @@ public class Player {
     public Player(String playerName, Game game) {
         this.playerName = playerName;
         this.game = game;
+        this.strategy = new NormalPlayerStratagie(game, this);
     }
 
     public Strategy getStrategy() {
@@ -38,6 +39,10 @@ public class Player {
     public int pointsCardInHands() {
         CardHandler cardHandler = new CardHandler();
         return cardHandler.pointsInCards(cardInHand);
+    }
+
+    public void play() {
+        strategy.playMove();
     }
 
     //Options for a player to play (each checks if player has won already, if he knocked or if the game is over)
